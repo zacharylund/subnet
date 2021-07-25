@@ -1,24 +1,25 @@
-function long2ip (ip) {
-  return [ip >>> 24 & 0xFF, ip >>> 16 & 0xFF, ip >>> 8 & 0xFF, ip & 0xFF].join('.');
+function long2ip(ip) {
+  // eslint-disable-next-line no-bitwise
+  return [(ip >>> 24) & 0xFF, (ip >>> 16) & 0xFF, (ip >>> 8) & 0xFF, ip & 0xFF].join('.');
 }
 
-function ip2long (ip) {
+function ip2long(ip) {
   const octets = ip.split('.');
 
   return octets[0] * (2 ** 24) + octets[1] * (2 ** 16) + octets[2] * (2 ** 8) + octets[3] * 1;
 }
 
-function update () {
+function update() {
   const ip = ip2long(document.getElementById('ip').value);
-  const bits = parseInt(document.getElementById('bits').value);
+  const bits = parseInt(document.getElementById('bits').value, 10);
 
   const total = 2 ** (32 - bits);
   const mask = 2 ** 32 - 2 ** (32 - bits);
-  const network = ip & mask;
-  const broadcast = ip | ~mask;
-  const cidr = long2ip(network) + '/' + bits;
+  const network = ip & mask; // eslint-disable-line no-bitwise
+  const broadcast = ip | ~mask; // eslint-disable-line no-bitwise
+  const cidr = `${long2ip(network)}/${bits}`;
 
-  document.title = 'Subnet Calculator - ' + cidr;
+  document.title = `Subnet Calculator - ${cidr}`;
 
   document.getElementById('cidr').innerHTML = cidr;
   document.getElementById('total').innerHTML = total;
@@ -30,7 +31,7 @@ function update () {
   document.getElementById('last').innerHTML = total > 3 ? long2ip(broadcast - 1) : '-';
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const url = new URL(window.location);
   const subnetForm = document.getElementById('subnet-form');
   const ipInput = document.getElementById('ip');
@@ -48,41 +49,41 @@ document.addEventListener('DOMContentLoaded', function () {
     update();
   }
 
-  var links = document.querySelectorAll('.nav-link');
+  const links = document.querySelectorAll('.nav-link');
 
-  for (i = 0; i < links.length; i++) {
-    links[i].addEventListener('click', function(e) {
-      e.preventDefault();
+  for (let i = 0; i < links.length; i += 1) {
+    links[i].addEventListener('click', (event) => {
+      event.preventDefault();
 
-      const url = new URL(this.href);
+      const newUrl = new URL(event.currentTarget.href);
 
-      ipInput.value = url.searchParams.get('ip');
-      bitsInput.value = url.searchParams.get('bits');
+      ipInput.value = newUrl.searchParams.get('ip');
+      bitsInput.value = newUrl.searchParams.get('bits');
 
       update();
 
-      window.history.pushState({}, '', url);
+      window.history.pushState({}, '', newUrl);
     });
   }
 
-  subnetForm.onsubmit = function (event) {
+  subnetForm.onsubmit = (event) => {
     event.preventDefault();
 
     update();
 
-    const url = new URL(window.location);
+    const newUrl = new URL(window.location);
 
-    url.searchParams.set('ip', ipInput.value);
-    url.searchParams.set('bits', bitsInput.value);
+    newUrl.searchParams.set('ip', ipInput.value);
+    newUrl.searchParams.set('bits', bitsInput.value);
 
-    window.history.pushState({}, '', url);
+    window.history.pushState({}, '', newUrl);
   };
 
-  window.addEventListener('popstate', function () {
-    const url = new URL(window.location);
+  window.addEventListener('popstate', () => {
+    const newUrl = new URL(window.location);
 
-    ipInput.value = url.searchParams.get('ip');
-    bitsInput.value = url.searchParams.get('bits');
+    ipInput.value = newUrl.searchParams.get('ip');
+    bitsInput.value = newUrl.searchParams.get('bits');
 
     update();
   });
