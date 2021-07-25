@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha256-XDbijJp72GS2c+Ij234ZNJIyJ1Nv+9+HH1i28JuayMk=" crossorigin="anonymous"></script>
+		<script defer src="/script.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.0.2/dist/css/bootstrap-dark.min.css" integrity="sha256-7Vkdu5Oh+M9yKmZQWZwyPD/HtZiJ6hOXPIwKvTcWpo8=" crossorigin="anonymous">
+		<title>Subnet Calculator</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+			<div class="container">
+				<a class="navbar-brand" href="/">Subnet Calculator</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-links" aria-controls="navbar-links" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbar-links">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="?ip=10.0.0.0&bits=8">10.0.0.0/8</a>
+						</li>
+                        <li class="nav-item">
+							<a class="nav-link" href="?ip=172.16.0.0&bits=12">172.16.0.0/12</a>
+						</li>
+                        <li class="nav-item">
+							<a class="nav-link" href="?ip=192.168.0.0&bits=16">192.168.0.0/16</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+			<form id="subnet-form" class="row gx-3 gy-3 mb-3 align-items-center">
+				<div class="col-auto">
+					<input type="text" class="form-control" id="ip" name="ip" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" title="IP Address" placeholder="192.168.1.0" required>
+				</div>
+				<div class="col-auto">/</div>
+				<div class="col-lg-1 col-md-2 col-sm-3 col-4">
+					<input type="number" class="form-control" id="bits" name="bits" min="0" max="32" title="Mask Bits" placeholder="24" required>
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn btn-dark">Calculate</button>
+				</div>
+			</form>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span class="text-muted">CIDR:</span>
+					<span id="cidr"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Subnet Mask:</span>
+					<span id="mask"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Total Addresses:</span>
+					<span id="total"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Network Address:</span>
+					<span id="network"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Broadcast Address:</span>
+					<span id="broadcast"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Usable Addresses:</span>
+					<span id="usable"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">First Usable Address:</span>
+					<span id="first"></span>
+				</li>
+				<li class="list-group-item">
+					<span class="text-muted">Last Usable Address:</span>
+					<span id="last"></span>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
